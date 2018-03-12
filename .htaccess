@@ -1,0 +1,13 @@
+RewriteEngine On
+
+RewriteBase /WebVideoPlace/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{QUERY_STRING} ^(.+)$
+RewriteRule    ^(.*)$ /WebVideoPlace/index.php?path=$1&%1 [L]
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule    ^(.*)$ /WebVideoPlace/index.php?path=$1 [L]
