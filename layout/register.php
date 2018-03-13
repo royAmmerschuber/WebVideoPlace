@@ -6,42 +6,43 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Floating labels example for Bootstrap</title>
+    <title>Register</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/WebVideoPlace/layout/css/General.css">
+    <?php  include_once "head.php"?>
     <!-- Custom styles for this template -->
     <link href="/WebVideoPlace/layout/css/floating-labels.css" rel="stylesheet">
+    <script src="/WebVideoPlace/layout/js/auth.js"></script>
 </head>
 
 <body>
 <?php include_once "header.php"?>
-<form class="form-signin">
+<div class="form-signin" id="formRegister">
     <div class="text-center mb-4">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Register</h1>
         <p>Please Register</p>
     </div>
 
+    <p class="err" id="eName"></p>
     <div class="form-label-group">
-        <input type="email" id="inputEmail" class="form-control" placeholder="User Name" name="user" required autofocus>
-        <label for="inputEmail">User Name</label>
+        <input type="text" id="inputName" class="form-control" placeholder="User Name" name="user" required autofocus>
+        <label for="inputName">User Name</label>
     </div>
+    <p class="err" id="eEmail"></p>
     <div class="form-label-group">
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required autofocus>
         <label for="inputEmail">Email address</label>
     </div>
-
+    <p class="err" id="ePassword1"></p>
     <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password1" required>
-        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword1" class="form-control" placeholder="Password" name="password1" required>
+        <label for="inputPassword1">Password</label>
     </div>
-
+    <p class="err" id="ePassword2"></p>
     <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password2" required>
-        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword2" class="form-control" placeholder="Password" name="password2" required>
+        <label for="inputPassword2">Password</label>
     </div>
 
     <!--<div class="checkbox mb-3">
@@ -49,9 +50,9 @@
             <input type="checkbox" value="remember-me"> Remember me
         </label>
     </div>-->
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" onclick="checkRegister()">Sign in</button>
     <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
-</form>
+</div>
 <?php include_once "footer.php"?>
 </body>
 </html>

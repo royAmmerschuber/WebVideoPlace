@@ -6,32 +6,31 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Floating labels example for Bootstrap</title>
+    <title>Login</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/WebVideoPlace/layout/css/General.css">
+    <?php include_once  "head.php"?>
     <!-- Custom styles for this template -->
     <link href="/WebVideoPlace/layout/css/floating-labels.css" rel="stylesheet">
 </head>
 
 <body>
 <?php include_once "header.php"?>
-<form class="form-signin">
+<form class="form-signin" id="formLogin">
     <div class="text-center mb-4">
         <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Login</h1>
         <p>Please login</p>
     </div>
 
+    <p class="err" id="eName"></p>
     <div class="form-label-group">
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address or name" required autofocus>
-        <label for="inputEmail">Email address</label>
+        <input type="text" id="inputName" class="form-control" placeholder="Email address or Username" name="name" required autofocus>
+        <label for="inputEmail">Email address or Username</label>
     </div>
 
+    <p class="err" id="ePassword"></p>
     <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
         <label for="inputPassword">Password</label>
     </div>
 

@@ -23,14 +23,14 @@ class Database{
 
     }
 
-    public static function instance(){
+    public static function instance():Database{
         if(Database::$instance == null){
             Database::$instance = new Database();
         }
         return Database::$instance;
     }
 
-    public function connection(){
+    public function connection():PDO{
         return $this->pdo;
     }
 
@@ -40,7 +40,7 @@ class Database{
         "Create Table User(
             id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
             name VARCHAR(64) NOT NULL ,
-            password VARCHAR(128) NOT NULL,
+            password VARCHAR(256) NOT NULL,
             email VARCHAR(64) NOT NULL )
             ");
         $this->pdo->exec(
