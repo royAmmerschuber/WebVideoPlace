@@ -29,16 +29,19 @@
         <input type="text" id="inputName" class="form-control" placeholder="User Name" name="user" required autofocus>
         <label for="inputName">User Name</label>
     </div>
+
     <p class="err" id="eEmail"></p>
     <div class="form-label-group">
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required autofocus>
         <label for="inputEmail">Email address</label>
     </div>
+
     <p class="err" id="ePassword1"></p>
     <div class="form-label-group">
         <input type="password" id="inputPassword1" class="form-control" placeholder="Password" name="password1" required>
         <label for="inputPassword1">Password</label>
     </div>
+
     <p class="err" id="ePassword2"></p>
     <div class="form-label-group">
         <input type="password" id="inputPassword2" class="form-control" placeholder="Password" name="password2" required>
@@ -50,8 +53,9 @@
             <input type="checkbox" value="remember-me"> Remember me
         </label>
     </div>-->
-    <button class="btn btn-lg btn-primary btn-block" onclick="checkRegister()">Sign in</button>
-    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+    <button class="btn btn-lg btn-primary btn-block" onclick="checkRegister()">Register</button>
+    <p class="mt-5 mb-3 text-muted text-center"><a href="/WebVideoPlace/Auth/login">Login</a></p>
+
 </div>
 <?php include_once "footer.php"?>
 </body>

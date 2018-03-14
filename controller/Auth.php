@@ -16,37 +16,39 @@ class Auth
     }
 
     public function loginCheck(){
-        $valid=true;
+        if(isset($_POST["name"]) && isset($_POST["password"])) {
+            $valid = true;
+            $pdo = Database::instance()->connection();
+            $p = $pdo->prepare("Select count(*) from user where name=:name");
+            $p->bindParam(":name", $_POST["name"]);
+            $p->execute();
+            $x=$p->fetchColumn(0);
+            if ($x == 0) {
+                $valid = false;
+                $eName = "the User Does not exist".$x;
+            }
+            $p = $pdo->prepare("Select * from user where name=:name");
+            $p->bindParam(":name", $_POST["name"]);
+            $p->execute();
+            $u = $p->fetch(PDO::FETCH_ASSOC);
+            if (!password_verify($_POST["password"], $u["password"])) {
+                $valid = false;
+                $ePassword = "the Username or Password is incorrect";
+            }
 
-        $pdo=Database::instance()->connection();
-        $p=$pdo->prepare("Select count(*) from user where name=:name");
-        $p->bindParam(":name",$_POST["name"]);
-        $p->execute();
-        if($p->fetchColumn(0)==0){
-            $valid=false;
-            $eName="the User Does not exist";
-        }
-        $p=$pdo->prepare("Select * from user where name=:name");
-        $p->bindParam(":name",$_POST["name"]);
-        $p->execute();
-        $u=$p->fetch(PDO::FETCH_ASSOC);
-        if(!password_verify($_POST["password"],$u["password"])){
-            $valid=false;
-            $ePasword="the Username or Password is incorrect";
-        }
+            if ($valid) {
+                $_SESSION["uid"] = $u["id"];
+                return;
+            }
 
-        if(!isset($_POST["name"]) || !isset($_POST["password"])) {
-            $valid=false;
-            $eName="Please fill out the entire form";
+        } else {
+            $eName = "Please fill out the entire form";
+
         }
-        if($valid){
-            $_SESSION["uid"]=$u["id"];
-        }else{
-            if(isset($eName)){echo $eName;}
-            echo "\n";
-            if(isset($ePasword)){echo $ePasword;}
-            echo "\n";
-        }
+        if (isset($eName)) {echo $eName;}
+        echo "\n";
+        if (isset($ePassword)) {echo $ePassword;}
+        echo "\n";
     }
 
     public function register(){
@@ -98,6 +100,7 @@ class Auth
     }
 
     public function logout(){
-
+        session_destroy();
+        echo "<script>window.location.replace(\"/WebVideoPlace/\")</script>";
     }
 }

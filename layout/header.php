@@ -9,16 +9,16 @@
                 <a class="nav-link" href="/WebVideoPlace/Main/index">Home <span class="sr-only">(current)</span></a>
             </li>
             <?php
-                if(isset($_SESSION["UID"])){
+                if(isset($_SESSION["uid"])){
                     echo
                     "<li class=\"nav-item\">
-                        <a class=\"nav-link\" href=\"#\">Logout</a>
+                        <a class=\"nav-link\" href=\"/WebVideoPlace/Auth/logout\">Logout</a>
                     </li>
                     <li class=\"nav-item\">
-                        <a class=\"nav-link\" href=\"#\">Upload</a>
+                        <a class=\"nav-link\" href=\"/WebVideoPlace/Video/upload\">Upload</a>
                     </li>
                     <li class=\"nav-item\">
-                        <a class=\"nav-link\" href=\"#\">Favorites</a>
+                        <a class=\"nav-link\" href=\"/WebVideoPlace/Main/favorites\">Favorites</a>
                     </li>";
                 }else{
                     echo
@@ -29,10 +29,10 @@
                         <a class=\"nav-link\" href=\"/WebVideoPlace/Auth/login\">Login</a>
                     </li>
                     <li class=\"nav-item\">
-                        <a class=\"nav-link disabled\" href=\"#\">Upload</a>
+                        <a class=\"nav-link disabled\">Upload</a>
                     </li>
                     <li class=\"nav-item\">
-                        <a class=\"nav-link disabled\" href=\"#\">Favorites</a>
+                        <a class=\"nav-link disabled\">Favorites</a>
                     </li>
                     ";
                 }

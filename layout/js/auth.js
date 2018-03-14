@@ -1,27 +1,31 @@
 function checkLogin() {
     var valid=true;
     if($("#inputName").val()==""||
-        $("#inputPassword").val()==""){
+        $("#inputPassword1").val()==""){
         valid=false;
         $("#eName").text("please fill out the entire form")
     }
+
     if(valid){
         $.ajax({
-            url:"/WebVideoPlace/Auth/loginCheck",
-            data:{
-                username: $("#inputName").val(),
-                password: $("#inputPassword").val()
+            url: "/WebVideoPlace/Auth/loginCheck",
+            type: "POST",
+            data: {
+                "name": $("#inputName").val(),
+                "password": $("#inputPassword").val()
             },
-            success: function ( result ) {
-                var e=result.split("\n");
-                if(e.length>0){
+            success: function (result) {
+
+                var e = result.split("\n");
+                console.log(result);
+                if (e.length > 1) {
                     $("#eName").text(e[0]);
                     $("#ePassword").text(e[1]);
-                }else{
-                    window.location.replace("/WebVideoPlace")
+                } else {
+                    window.location.replace("/WebVideoPlace/");
                 }
             }
-        })
+        });
     }
 }
 function checkRegister() {
@@ -41,6 +45,7 @@ function checkRegister() {
         $.ajax({
             url: "/WebVideoPlace/Auth/registerCheck",
             type: "POST",
+            datatype:"JSON",
             data: {
                 "name": $("#inputName").val(),
                 "email": $("#inputEmail").val(),
@@ -59,6 +64,6 @@ function checkRegister() {
                     window.location.replace("/WebVideoPlace/Auth/Login");
                 }
             }
-        })
+        });
     }
 }
