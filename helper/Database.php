@@ -49,7 +49,9 @@ class Database{
               name VARCHAR(128) NOT NULL ,
               description VARCHAR(1024) NOT NULL ,
               video VARCHAR(64) NOT NULL ,
-              thumbnail VARCHAR(64) NOT NULL 
+              thumbnail VARCHAR(64) NOT NULL,
+              userFK INT NOT NULL ,
+              views INT NOT NULL 
             )"
         );
         $this->pdo->exec(

@@ -8,13 +8,20 @@
 
 class Auth
 {
+    public static function securePage(){
+        if(!isset($_SESSION["uid"])) {
+            echo "<script>window.location.replace(\"/WebVideoPlace/Auth\")</script>";
+            return;
+        }
+    }
+
     public function index(){
         login();
     }
+
     public function login(){
         include_once "layout/login.php";
     }
-
     public function loginCheck(){
         if(isset($_POST["name"]) && isset($_POST["password"])) {
             $valid = true;

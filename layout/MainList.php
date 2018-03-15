@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <?php include_once "head.php"?>
+    <script src="/WebVideoPlace/layout/js/main.js"></script>
 </head>
 <body>
 <?php include_once "header.php" ?>
@@ -18,8 +19,8 @@
 <div class="album py-5 bg-light">
     <div class="container">
 
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row" id="list">
+            <div class="col-md-4" >
                 <div class="card mb-4 box-shadow">
                     <img class="card-img-top"
                          data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
@@ -45,5 +46,6 @@
 
 
 <?php include_once "footer.php" ?>
+<script>loadList()</script>
 </body>
 </html>

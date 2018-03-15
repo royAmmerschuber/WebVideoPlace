@@ -17,17 +17,17 @@
 <?php include_once "header.php"?>
 <form class="form-box" method="post" action="/WebVideoPlace/Video/checkUpload" enctype="multipart/form-data">
     <h1>Upload Video</h1>
-    <p class="err" id="eName"></p>
+    <p class="err" id="eName"><?php if(isset($eName)){echo $eName;}?></p>
     <label for="inputName">Video name:</label>
     <input type="text" id="inputName" name="name" class="form-control" placeholder="Video Name" required autofocus>
 
-    <p class="err" id="eDescr"></p>
+    <p class="err" id="eDescr"><?php if(isset($eDesc)){echo $eDesc;}?></p>
     <label for="inputDescr">Description:</label>
     <textarea id="inputDescr" class="form-control" name="description" placeholder="Description" required></textarea>
-    <p class="err" id="eThumbnail"></p>
+    <p class="err" id="eThumbnail"><?php if(isset($eThumb)){echo $eThumb;}?></p>
     <label for="inputThumbnail">Thumbnail:</label>
     <input type="file" id="inputThumbnail" name="thumbnail" required>
-    <p class="err" id="eVideo"></p>
+    <p class="err" id="eVideo"><?php if(isset($eVideo)){echo $eVideo;}?></p>
     <label for="inputVideo">Video:</label>
     <input type="file" id="inputVideo" name="video" required>
     <button type="submit">Upload</button>
