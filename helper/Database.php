@@ -64,10 +64,11 @@ class Database{
         );
         $this->pdo->exec(
             "Create Table LikeDislike(
-              id INT PRIMARY KEY AUTO_INCREMENT NOT NULL ,
+              
               isPositive BOOLEAN NOT NULL ,
               userFK INT NOT NULL ,
-              videoFK INT NOT NULL 
+              videoFK INT NOT NULL,
+              PRIMARY KEY (userFK,videoFK)
             )"
         );
     }

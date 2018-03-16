@@ -9,8 +9,6 @@
 class Main
 {
     public function index(){
-        $pdo=Database::instance()->connection();
-
         include_once "layout/MainList.php";
     }
 

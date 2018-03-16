@@ -1,3 +1,11 @@
+//List view
+function loadListS(search){
+
+    if(search!=null){
+        $("#search").val(search);
+    }
+    loadList();
+}
 function loadList(){
     $.ajax({
         url:"/WebVideoPlace/Main/loadList",
@@ -45,5 +53,24 @@ function view(id) {
 }
 function edit(id) {
     window.location.href="/WebVideoPlace/Video/edit?id="+id;
+
+}
+
+//video view
+function like(isPositive,vid){
+    $.ajax({
+        url:"/WebVideoPlace/Video/like",
+        type:"POST",
+        data:{
+            "isPositive":isPositive,
+            "vid":vid
+        },
+        success:function (result) {
+
+            $("#likes").html(result);
+        }
+    });
+}
+function comment(){
 
 }

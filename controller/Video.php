@@ -10,11 +10,41 @@ class Video
 {
     public function index(){
         $pdo=Database::instance()->connection();
+        if(!isset($_GET["id"])){
+            //echo "<script>window.location.replace(\"/WebVideoPlace/Main\")</script>";
+            return;
+        }
+        $id=$_GET["id"];
         $p=$pdo->prepare("
-            select v.* 
+            select v.*,
+                u.name as owner,
+                SUM(if(isPositive,1,0)) as likes, 
+                SUM(if(isPositive,0,1))-1 as dislikes, 
+                u.id=:uid as isMine, 
+                (select isPositive from likedislike as li where li.userFK=:uid and li.videoFK=v.id) AS myLike
             from video as v
                 left JOIN user as u on u.id=v.userFK
-                LEFT JOIN likedislike as l on l.videoFK");
+                LEFT JOIN likedislike as l on l.videoFK
+            where v.id=:id");
+        $p->bindParam(":id",$id);
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
+        $vid=$p->fetch(PDO::FETCH_ASSOC);
+        if(!$vid["isMine"]){
+            $p=$pdo->prepare("update video set views=views+1 where id=:id");
+            $p->bindParam(":id",$id);
+            $p->execute();
+        }
+        $p=$pdo->prepare("
+            Select c.*, u.name, u.id=:oid as isOwner
+            from comment as c
+                LEFT JOIN user as u on u.id=c.userFK
+            WHERE videoFK=:id");
+        $p->bindParam(":id",$id);
+        $p->bindParam(":oid",$vid["id"]);
+        $p->execute();
+        $comments=$p->fetchAll(PDO::FETCH_ASSOC);
+        include_once "layout/video.php";
     }
 
     public function upload(){
@@ -54,7 +84,7 @@ class Video
             $p->bindParam(":ufk",$_SESSION["uid"]);
             $p->execute();
             $vid=$pdo->query("select LAST_INSERT_ID()")->fetchColumn(0);
-            echo "<script>window.location.replace(\"/WebVideoPlace/Video?id=".$vid."\")</script>";
+            //echo "<script>window.location.replace(\"/WebVideoPlace/Video?id=".$vid."\")</script>";
 
         }else{
             $eName="please fill out the entire form";
@@ -62,5 +92,47 @@ class Video
             return;
 
         }
+    }
+
+    public function edit(){
+
+    }
+
+    public function like(){
+        //echo $_POST["isPositive"];
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("
+            select count(*) from likedislike 
+            where userFK=:uid and videoFK=:vid and isPositive=:pos");
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $truth=$_POST["isPositive"]=="true";
+        $p->bindParam(":pos",$truth);
+        $p->execute();
+        //echo $p->debugDumpParams()."<br><br><br>";
+        $x=$p->fetchColumn();
+        //echo $x;
+        if($x==1){
+            $p=$pdo->prepare("delete from likedislike where userFK=:uid and videoFK=:vid");
+
+        }else{
+            $p=$pdo->prepare("replace likedislike(isPositive, userFK, videoFK) VALUE (:pos,:uid,:vid)");
+            $tru=$_POST["isPositive"]=="true"?1:0;
+
+            $p->bindParam(":pos",$tru);
+        }
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        //echo $p->debugDumpParams();
+        $p=$pdo->prepare("
+            select SUM(if(isPositive,1,0)) as likes, 
+                SUM(if(isPositive,0,1)) as dislikes 
+            from likedislike
+            WHERE videoFK=:vid and userFK=:uid");
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        echo json_encode($p->fetch(PDO::FETCH_ASSOC));
     }
 }

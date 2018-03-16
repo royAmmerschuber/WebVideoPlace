@@ -1,7 +1,7 @@
 
-  .err{
-    color: red;
-  }
+.err{
+  color: red;
+}
 
 
 .form-box{
@@ -12,5 +12,17 @@
     color: darkgrey;
     border-bottom: 1px solid black;
     font-size: 30px;
+  }
+}
+
+.video-box{
+  margin: 70px auto auto;
+  width: 70%;
+  & video{
+    width: 100%;
+  }
+
+  & .dislike{
+    transform:rotate(180deg);
   }
 }

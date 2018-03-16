@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Roy
- * Date: 12/03/2018
- * Time: 09:20
- */
-?>
-<html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -46,6 +38,18 @@
 
 
 <?php include_once "footer.php" ?>
-<script>loadList()</script>
+<?php
+if(isset($_GET["search"])){
+    echo "<script>loadListS(\"".$_GET["search"]."\");";
+
+}else{
+    echo "<script>loadList();";
+}
+?>
+$(document).ready(function(){
+$("#searchSubmit")[0].onclick=null;
+$("#searchSubmit").click(loadList);
+});
+</script>
 </body>
 </html>
