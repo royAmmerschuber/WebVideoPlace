@@ -26,3 +26,15 @@
     transform:rotate(180deg);
   }
 }
+
+body > div{
+  margin-top: 70px;
+}
+
+.iLike{
+  background: #afa;
+}
+
+.iLikeBtn{
+  filter: invert(1);
+}

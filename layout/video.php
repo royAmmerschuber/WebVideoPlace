@@ -15,10 +15,24 @@
     </video>
     <div>
         <p>views:<?php echo $vid["views"];?></p>
-        <img src="/WebVideoPlace/layout/icons/like.png" onclick="like(true,<?php echo $vid["id"];?>)">
-        <p><?php echo $vid["likes"];?></p>
-        <img src="/WebVideoPlace/layout/icons/like.png" onclick="like(false,<?php echo $vid["id"];?>)" class="dislike">
-        <p id="likes"><?php echo $vid["dislikes"];?></p>
+        <?php
+//        echo $vid["myLike"];
+        if($vid["myLike"]==true){
+            $lLike=" iLikeBtn";
+            $lDislike="";
+        }else if($vid["myLike"]==null){
+            $lLike="";
+            $lDislike="";
+        }else{
+            $lLike="";
+            $lDislike=" iLikeBtn";
+
+        }
+        ?>
+        <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnL" onclick="like(true,<?php echo $vid["id"];?>)" class="<?php echo $lLike?>">
+        <p id="likes"><?php if(isset($like["likes"])){ echo $like["likes"];}else{echo 0;}?></p>
+        <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnD" onclick="like(false,<?php echo $vid["id"];?>)" class="dislike <?php echo $lDislike?>">
+        <p id="dislikes"><?php if(isset($like["dislikes"])){ echo $like["dislikes"];}else{echo 0;}?></p>
         <?php
         if($vid["isMine"]){
             echo "<a href=\"/WebVideoPlace/Video/edit?id=".$vid["id"]."\" class=\"btn\">edit</a>";

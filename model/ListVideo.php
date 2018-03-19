@@ -14,4 +14,5 @@ class ListVideo
     public $thumbnail;
     public $score;
     public $isMine;
+    public $iLike;
 }

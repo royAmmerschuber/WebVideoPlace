@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <?php include_once "head.php"?>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
     <script src="/WebVideoPlace/layout/js/main.js"></script>
 </head>
 <body>
@@ -50,10 +51,7 @@ if(isset($_GET["search"])){
     echo "<script>loadList(\"$fav\");";
 }
 ?>
-$(document).ready(function(){
-$("#searchSubmit")[0].onclick=null;
-$("#searchSubmit").click(loadList);
-});
+initFav();
 </script>
 </body>
 </html>

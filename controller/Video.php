@@ -18,18 +18,23 @@ class Video
         $p=$pdo->prepare("
             select v.*,
                 u.name as owner,
-                SUM(if(isPositive,1,0)) as likes, 
-                SUM(if(isPositive,0,1))-1 as dislikes, 
                 u.id=:uid as isMine, 
                 (select isPositive from likedislike as li where li.userFK=:uid and li.videoFK=v.id) AS myLike
             from video as v
                 left JOIN user as u on u.id=v.userFK
-                LEFT JOIN likedislike as l on l.videoFK
             where v.id=:id");
         $p->bindParam(":id",$id);
         $p->bindParam(":uid",$_SESSION["uid"]);
         $p->execute();
         $vid=$p->fetch(PDO::FETCH_ASSOC);
+        $p=$pdo->prepare("
+            select SUM(if(isPositive,1,0)) as likes, 
+                SUM(if(isPositive,0,1)) as dislikes 
+            from likedislike
+            WHERE videoFK=:vid");
+        $p->bindParam(":vid",$id);
+        $p->execute();
+        $like=$p->fetch(PDO::FETCH_ASSOC);
         if(!$vid["isMine"]){
             $p=$pdo->prepare("update video set views=views+1 where id=:id");
             $p->bindParam(":id",$id);
@@ -127,11 +132,12 @@ class Video
         //echo $p->debugDumpParams();
         $p=$pdo->prepare("
             select SUM(if(isPositive,1,0)) as likes, 
-                SUM(if(isPositive,0,1)) as dislikes 
+                SUM(if(isPositive,0,1)) as dislikes,
+                (SELECT x.isPositive from likedislike as x where x.userFK=:uid and x.videoFK=:vid) as myLike
             from likedislike
-            WHERE videoFK=:vid and userFK=:uid");
-        $p->bindParam(":uid",$_SESSION["uid"]);
+            WHERE videoFK=:vid");
         $p->bindParam(":vid",$_POST["vid"]);
+        $p->bindParam(":uid",$_SESSION["uid"]);
         $p->execute();
         echo json_encode($p->fetch(PDO::FETCH_ASSOC));
     }

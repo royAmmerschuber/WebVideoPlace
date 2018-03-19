@@ -22,10 +22,10 @@ class Main
                     concat(substring(v.description,1,64),'...'),
                     v.description) as description,
                 v.thumbnail,
-                SUM(IF(l.isPositive,1,-1))+1 as score,
-                :uid=u.id as isMine 
+                V.views as score,
+                :uid=u.id as isMine,
+                (select isPositive from likedislike as lx where lx.userFK=:uid and lx.videoFK=v.id) as iLike
             from video as v 
-                left join likedislike as l on v.id=l.videoFK 
                 left join user as u on u.id=v.userFK
             WHERE 
                 v.name REGEXP :search or
@@ -39,5 +39,40 @@ class Main
         $p->bindParam(":uid",$_SESSION["uid"]);
         $p->execute();
         echo json_encode($p->fetchAll(PDO::FETCH_OBJ));
+    }
+
+    public function loadListFav(){
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("
+            Select 
+                v.id,
+                v.name,
+                IF(LENGTH(v.description)>64,
+                    concat(substring(v.description,1,64),'...'),
+                    v.description) as description,
+                v.thumbnail,
+                V.views as score,
+                :uid=u.id as isMine 
+            from video as v 
+            RIGHT JOIN likedislike as l on v.id=l.videoFK 
+
+                left join user as u on u.id=v.userFK
+            WHERE 
+                (v.name REGEXP :search or
+                v.description REGEXP :search OR 
+                u.name REGEXP :search) AND 
+                L.userFK=:uid
+            ORDER BY score,v.name DESC
+            "
+        );
+        $p->bindParam(":search",$_POST["search"]);
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
+        echo json_encode($p->fetchAll(PDO::FETCH_OBJ));
+    }
+
+    public function favorites(){
+        $fav="Fav";
+        include_once "layout/FavList.php";
     }
 }
