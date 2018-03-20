@@ -38,7 +38,13 @@ class Main
         $p->bindParam(":search",$_POST["search"]);
         $p->bindParam(":uid",$_SESSION["uid"]);
         $p->execute();
-        echo json_encode($p->fetchAll(PDO::FETCH_OBJ));
+        //echo $p->debugDumpParams();
+        $x=$p->fetchAll(PDO::FETCH_OBJ);
+        for($i=0;$i<count($x);$i++){
+            $x[$i]->name=utf8_encode($x[$i]->name);
+            $x[$i]->description=utf8_encode($x[$i]->description);
+        }
+        echo json_encode($x);
     }
 
     public function loadListFav(){
@@ -61,18 +67,34 @@ class Main
                 (v.name REGEXP :search or
                 v.description REGEXP :search OR 
                 u.name REGEXP :search) AND 
-                L.userFK=:uid
+                L.userFK=:uid AND 
+                L.isPositive=TRUE 
             ORDER BY score,v.name DESC
             "
         );
         $p->bindParam(":search",$_POST["search"]);
         $p->bindParam(":uid",$_SESSION["uid"]);
         $p->execute();
-        echo json_encode($p->fetchAll(PDO::FETCH_OBJ));
+        $x=$p->fetchAll(PDO::FETCH_OBJ);
+        for($i=0;$i<count($x);$i++){
+            $x[$i]->name=utf8_encode($x[$i]->name);
+            $x[$i]->description=utf8_encode($x[$i]->description);
+        }
+        echo json_encode($x);
     }
 
     public function favorites(){
+        Auth::securePage();
         $fav="Fav";
         include_once "layout/FavList.php";
+    }
+
+    public function dropFav(){
+        echo "test";
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("DELETE from likeDislike where videoFK=:vid and userFK=:uid");
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
     }
 }

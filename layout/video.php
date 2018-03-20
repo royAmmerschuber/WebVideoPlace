@@ -42,6 +42,15 @@
     <p>
         <?php echo $vid["description"];?>
     </p>
+    <div>
+        <div>
+            <label for="commentText">Comment</label><textarea id="commentText"></textarea>
+            <button onclick="comment()">Submit</button>
+        </div>
+        <div id="commentList">
+
+        </div>
+    </div>
 </div>
 
 

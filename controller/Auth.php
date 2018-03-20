@@ -12,11 +12,13 @@ class Auth
         if(!isset($_SESSION["uid"])) {
             echo "<script>window.location.replace(\"/WebVideoPlace/Auth\")</script>";
             return;
+        }else{
+            return $_SESSION["uid"];
         }
     }
 
     public function index(){
-        login();
+        $this->login();
     }
 
     public function login(){

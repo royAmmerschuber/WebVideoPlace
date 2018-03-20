@@ -56,15 +56,14 @@ class Database{
         );
         $this->pdo->exec(
             "Create Table Comment(
-              id INT PRIMARY KEY AUTO_INCREMENT NOT NULL ,
               text VARCHAR(1024) NOT NULL, 
               userFK INT NOT NULL ,
-              videoFK INT NOT NULL
+              videoFK INT NOT NULL,
+              PRIMARY KEY (userFK,videoFK)
             )"
         );
         $this->pdo->exec(
             "Create Table LikeDislike(
-              
               isPositive BOOLEAN NOT NULL ,
               userFK INT NOT NULL ,
               videoFK INT NOT NULL,

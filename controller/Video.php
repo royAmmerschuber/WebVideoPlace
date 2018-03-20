@@ -8,6 +8,7 @@
 
 class Video
 {
+    //View
     public function index(){
         $pdo=Database::instance()->connection();
         if(!isset($_GET["id"])){
@@ -52,6 +53,55 @@ class Video
         include_once "layout/video.php";
     }
 
+    public function like(){
+        //echo $_POST["isPositive"];
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("
+            select count(*) from likedislike 
+            where userFK=:uid and videoFK=:vid and isPositive=:pos");
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $truth=$_POST["isPositive"]=="true";
+        $p->bindParam(":pos",$truth);
+        $p->execute();
+        //echo $p->debugDumpParams()."<br><br><br>";
+        $x=$p->fetchColumn();
+        //echo $x;
+        if($x==1){
+            $p=$pdo->prepare("delete from likedislike where userFK=:uid and videoFK=:vid");
+
+        }else{
+            $p=$pdo->prepare("replace likedislike(isPositive, userFK, videoFK) VALUE (:pos,:uid,:vid)");
+            $tru=$_POST["isPositive"]=="true"?1:0;
+
+            $p->bindParam(":pos",$tru);
+        }
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        //echo $p->debugDumpParams();
+        $p=$pdo->prepare("
+            select SUM(if(isPositive,1,0)) as likes, 
+                SUM(if(isPositive,0,1)) as dislikes,
+                (SELECT x.isPositive from likedislike as x where x.userFK=:uid and x.videoFK=:vid) as myLike
+            from likedislike
+            WHERE videoFK=:vid");
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
+        echo json_encode($p->fetch(PDO::FETCH_ASSOC));
+    }
+    public function comment(){
+        Auth::securePage();
+        $p=Database::instance()->connection()->prepare("
+            insert into comment(text, userFK, videoFK) 
+            VALUE (:text,:uid,:vid)");
+        $p->bindParam(":text",$_POST["text"]);
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+    }
+    //Upload
     public function upload(){
         include_once "layout/upload.php";
 
@@ -99,46 +149,39 @@ class Video
         }
     }
 
+    //Edit
     public function edit(){
+        $uid=Auth::securePage();
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("select * from video where id=:vid");
+        $p->bindParam(":vid",$_GET["id"]);
+        $p->execute();
+        $x=$p->fetch(PDO::FETCH_ASSOC);
 
+        if($uid!=$x["userFK"]){
+            header("Location: /WebVideoPlace/Video?id=".$x["id"]);
+            die();
+        }
+        include_once "layout/edit.php";
     }
 
-    public function like(){
-        //echo $_POST["isPositive"];
+    public function editSave(){
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("update video set name=:name, description=:desc where id=:vid");
+        $p->bindParam(":name",$_POST["name"]);
+        $p->bindParam(":desc",$_POST["desc"]);
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        return true;
+    }
+    public function editDelete(){
         $pdo=Database::instance()->connection();
         $p=$pdo->prepare("
-            select count(*) from likedislike 
-            where userFK=:uid and videoFK=:vid and isPositive=:pos");
-        $p->bindParam(":uid",$_SESSION["uid"]);
-        $p->bindParam(":vid",$_POST["vid"]);
-        $truth=$_POST["isPositive"]=="true";
-        $p->bindParam(":pos",$truth);
-        $p->execute();
-        //echo $p->debugDumpParams()."<br><br><br>";
-        $x=$p->fetchColumn();
-        //echo $x;
-        if($x==1){
-            $p=$pdo->prepare("delete from likedislike where userFK=:uid and videoFK=:vid");
-
-        }else{
-            $p=$pdo->prepare("replace likedislike(isPositive, userFK, videoFK) VALUE (:pos,:uid,:vid)");
-            $tru=$_POST["isPositive"]=="true"?1:0;
-
-            $p->bindParam(":pos",$tru);
-        }
-        $p->bindParam(":uid",$_SESSION["uid"]);
+                delete from video where id=:vid; 
+                delete from comment where videoFK=:vid; 
+                delete from likedislike where videoFK=:vid");
         $p->bindParam(":vid",$_POST["vid"]);
         $p->execute();
-        //echo $p->debugDumpParams();
-        $p=$pdo->prepare("
-            select SUM(if(isPositive,1,0)) as likes, 
-                SUM(if(isPositive,0,1)) as dislikes,
-                (SELECT x.isPositive from likedislike as x where x.userFK=:uid and x.videoFK=:vid) as myLike
-            from likedislike
-            WHERE videoFK=:vid");
-        $p->bindParam(":vid",$_POST["vid"]);
-        $p->bindParam(":uid",$_SESSION["uid"]);
-        $p->execute();
-        echo json_encode($p->fetch(PDO::FETCH_ASSOC));
+        return true;
     }
 }

@@ -3,8 +3,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <?php include_once "head.php"?>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
     <script src="/WebVideoPlace/layout/js/main.js"></script>
+
 </head>
 <body>
 <?php include_once "header.php" ?>
@@ -34,9 +38,10 @@
                 </div>
             </div>-->
         </div>
+        <img class="bucket" src="/WebVideoPlace/layout/icons/trash.png" id="trash">
+
     </div>
 </div>
-
 
 <?php include_once "footer.php" ?>
 <?php
@@ -51,7 +56,6 @@ if(isset($_GET["search"])){
     echo "<script>loadList(\"$fav\");";
 }
 ?>
-initFav();
 </script>
 </body>
 </html>
