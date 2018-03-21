@@ -25,6 +25,9 @@ function loadList(fav){
             JSON.parse(result).forEach( function (vid) {
                 html+=generateElement(vid);
             });
+            if(html==""){
+                html="<br>nothing found";
+            }
             $("#list").html(html);
             if(fav==="Fav"){
                 initFav();
@@ -107,7 +110,7 @@ function dropFav(drag){
 
 function checkEmptyFav(){
     if($("#list").html()==""){
-        $("#list").html("you dont have any favorites")
+        $("#list").html("<br>nothing found")
     }
 }
 function checkEmpty() {

@@ -79,7 +79,7 @@
   }
 
 }
-#commentList:nth-child(2n){
+#commentList:nth-child(2){
   background-color: white;
 }
 body > div{
@@ -95,6 +95,7 @@ body > div{
 #trash{
   position:fixed;
   bottom:20px;
+  left:20px;
   width: 256px;
   z-index: 100;
 }
