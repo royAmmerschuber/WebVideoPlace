@@ -56,11 +56,11 @@ class Database{
         );
         $this->pdo->exec(
             "Create Table Comment(
+              id int not null PRIMARY KEY AUTO_INCREMENT,
               text VARCHAR(1024) NOT NULL, 
               userFK INT NOT NULL ,
-              videoFK INT NOT NULL,
-              PRIMARY KEY (userFK,videoFK)
-            )"
+              videoFK INT NOT NULL
+              )"
         );
         $this->pdo->exec(
             "Create Table LikeDislike(

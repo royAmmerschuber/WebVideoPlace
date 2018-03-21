@@ -10,7 +10,6 @@
     <?php include_once  "head.php"?>
     <!-- Custom styles for this template -->
     <link href="/WebVideoPlace/layout/css/floating-labels.css" rel="stylesheet">
-    <script src="/WebVideoPlace/layout/js/video.js"></script>
 </head>
 
 <body>

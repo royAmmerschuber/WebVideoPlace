@@ -41,15 +41,6 @@ class Video
             $p->bindParam(":id",$id);
             $p->execute();
         }
-        $p=$pdo->prepare("
-            Select c.*, u.name, u.id=:oid as isOwner
-            from comment as c
-                LEFT JOIN user as u on u.id=c.userFK
-            WHERE videoFK=:id");
-        $p->bindParam(":id",$id);
-        $p->bindParam(":oid",$vid["id"]);
-        $p->execute();
-        $comments=$p->fetchAll(PDO::FETCH_ASSOC);
         include_once "layout/video.php";
     }
 
@@ -95,11 +86,31 @@ class Video
         Auth::securePage();
         $p=Database::instance()->connection()->prepare("
             insert into comment(text, userFK, videoFK) 
-            VALUE (:text,:uid,:vid)");
+        VALUE (:text,:uid,:vid)");
         $p->bindParam(":text",$_POST["text"]);
         $p->bindParam(":uid",$_SESSION["uid"]);
         $p->bindParam(":vid",$_POST["vid"]);
         $p->execute();
+        echo "test";
+    }
+
+    public function loadComments(){
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("
+            Select c.*, u.name, u.id=v.userFK as isOwner
+            from comment as c
+                LEFT JOIN user as u on u.id=c.userFK
+                LEFT JOIN video as v on v.id=c.videoFK
+            WHERE videoFK=:vid");
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        $x=$p->fetchAll(PDO::FETCH_ASSOC);
+        for($i=0;$i<count($x);$i++){
+            $x[$i]["name"]=utf8_encode($x[$i]["name"]);
+            $x[$i]["text"]=utf8_encode($x[$i]["text"]);
+        }
+       // echo print_r($x);
+        echo json_encode($x);
     }
     //Upload
     public function upload(){
@@ -139,7 +150,7 @@ class Video
             $p->bindParam(":ufk",$_SESSION["uid"]);
             $p->execute();
             $vid=$pdo->query("select LAST_INSERT_ID()")->fetchColumn(0);
-            //echo "<script>window.location.replace(\"/WebVideoPlace/Video?id=".$vid."\")</script>";
+            echo "<script>window.location.replace('/WebVideoPlace/Video?id=".$vid."')</script>";
 
         }else{
             $eName="please fill out the entire form";
@@ -177,11 +188,18 @@ class Video
     public function editDelete(){
         $pdo=Database::instance()->connection();
         $p=$pdo->prepare("
+            select video as v,thumbnail as t from video where id=:vid");
+        $p->bindParam(":vid",$_POST["vid"]);
+        $p->execute();
+        $files=$p->fetch(PDO::FETCH_ASSOC);
+        $p=$pdo->prepare("
                 delete from video where id=:vid; 
                 delete from comment where videoFK=:vid; 
                 delete from likedislike where videoFK=:vid");
         $p->bindParam(":vid",$_POST["vid"]);
         $p->execute();
+        unlink(Uploader::$VIDEO_LOC.$files["v"]);
+        unlink(Uploader::$THUMB_LOC.$files["t"]);
         return true;
     }
 }

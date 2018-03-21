@@ -152,27 +152,45 @@ function like(isPositive,vid){
 
 function comment(){
     $.ajax({
-        url:"",
+        url:"/WebVideoPlace/Video/comment",
         type:"POST",
         data:{
             "text":$("#commentText").val(),
             "vid":$.urlParam("id")
         },
         success:function(result){
-            if(result!==""){
-                window.location.href="/WebVideoPlace/Auth";
-            }else{
+            if (result == "test") {
                 loadComments();
+            } else {
+                window.location.href = "/WebVideoPlace/Auth";
             }
         }
     });
 }
 
 function loadComments() {
-
+    $.ajax({
+        url:"/WebVideoPlace/Video/loadComments",
+        type:"POST",
+        data:{
+            "vid":$.urlParam("id")
+        },
+        success:function (result) {
+            var l=JSON.parse(result);
+            var text="";
+            l.forEach(function (v) {
+                text+=generateComment(v);
+            });
+            $("#commentList").html(text);
+        }
+    })
 }
-function generateComment(){
-
+function generateComment(comm){
+    return "<div>\n" +
+           "    <h4 class='"+(comm["isOwner"]==1?"err":"")+"'>"+comm["name"]+"</h4>\n" +
+           "    <p>"+comm["text"]+"</p>\n" +
+           "</div>"
+    ;
 }
 
 //Video Edit
@@ -203,6 +221,7 @@ function deleteEdit(){
         })
     }
 }
+
 
 //other
 

@@ -13,7 +13,7 @@
     <video controls autoplay>
         <source src="/WebVideoPlace/media/video/<?php echo $vid["video"];?>" >
     </video>
-    <div>
+    <div class="vid-likebar">
         <p>views:<?php echo $vid["views"];?></p>
         <?php
 //        echo $vid["myLike"];
@@ -29,22 +29,30 @@
 
         }
         ?>
-        <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnL" onclick="like(true,<?php echo $vid["id"];?>)" class="<?php echo $lLike?>">
-        <p id="likes"><?php if(isset($like["likes"])){ echo $like["likes"];}else{echo 0;}?></p>
-        <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnD" onclick="like(false,<?php echo $vid["id"];?>)" class="dislike <?php echo $lDislike?>">
-        <p id="dislikes"><?php if(isset($like["dislikes"])){ echo $like["dislikes"];}else{echo 0;}?></p>
-        <?php
-        if($vid["isMine"]){
-            echo "<a href=\"/WebVideoPlace/Video/edit?id=".$vid["id"]."\" class=\"btn\">edit</a>";
-        }
-        ?>
+
+        <div>
+            <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnD" onclick="like(false,<?php echo $vid["id"];?>)" class="dislike <?php echo $lDislike?>">
+            <p id="dislikes"><?php if(isset($like["dislikes"])){ echo $like["dislikes"];}else{echo 0;}?></p>
+        </div>
+        <div>
+            <img src="/WebVideoPlace/layout/icons/like.png" id="likebtnL" onclick="like(true,<?php echo $vid["id"];?>)" class="<?php echo $lLike?>">
+            <p id="likes"><?php if(isset($like["likes"])){ echo $like["likes"];}else{echo 0;}?></p>
+        </div>
+
     </div>
+    <?php
+    if($vid["isMine"]){
+        echo "<a href=\"/WebVideoPlace/Video/edit?id=".$vid["id"]."\" class=\"btn\">edit</a>";
+    }
+    ?>
+    <h5>Description</h5>
     <p>
         <?php echo $vid["description"];?>
     </p>
-    <div>
+    <div class="comments">
         <div>
-            <label for="commentText">Comment</label><textarea id="commentText"></textarea>
+            <h5>Comment</h5>
+            <textarea id="commentText"></textarea>
             <button onclick="comment()">Submit</button>
         </div>
         <div id="commentList">
@@ -55,5 +63,6 @@
 
 
 <?php include_once "footer.php" ?>
+<script>loadComments();</script>
 </body>
 </html>

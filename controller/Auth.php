@@ -11,7 +11,7 @@ class Auth
     public static function securePage(){
         if(!isset($_SESSION["uid"])) {
             echo "<script>window.location.replace(\"/WebVideoPlace/Auth\")</script>";
-            return;
+
         }else{
             return $_SESSION["uid"];
         }
@@ -111,5 +111,43 @@ class Auth
     public function logout(){
         session_destroy();
         echo "<script>window.location.replace(\"/WebVideoPlace/\")</script>";
+    }
+
+    public function edit(){
+        Auth::securePage();
+        $p=Database::instance()->connection()->prepare("
+                select name,email from user where id=:uid");
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
+        $x=$p->fetch(PDO::FETCH_ASSOC);
+        include_once "layout/editUser.php";
+    }
+    public function editAct(){
+        Auth::securePage();
+        $pdo=Database::instance()->connection();
+        $p=$pdo->prepare("select * from user where id=:uid");
+        $p->bindParam(":uid",$_SESSION["uid"]);
+        $p->execute();
+        $x=$p->fetch(PDO::FETCH_ASSOC);
+        if(password_verify($_POST["oPass"],$x["password"])){
+            if($_POST["nPass"]==""){
+                $_POST["nPass"]=$_POST["oPass"];
+            }
+            $p=$pdo->prepare("
+                update user 
+                set name=:name,
+                    email=:email,
+                    password=:pass 
+                where id=:uid"
+            );
+            $hashword=password_hash($_POST["nPass"],PASSWORD_DEFAULT);
+            $p->bindParam(":name",$_POST["name"]);
+            $p->bindParam(":email",$_POST["email"]);
+            $p->bindParam(":pass",$hashword);
+            $p->bindParam(":uid",$_SESSION["uid"]);
+            $p->execute();
+        }else{
+            echo "password does not match";
+        }
     }
 }

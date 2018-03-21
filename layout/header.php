@@ -15,6 +15,9 @@
                         <a class=\"nav-link\" href=\"/WebVideoPlace/Auth/logout\">Logout</a>
                     </li>
                     <li class=\"nav-item\">
+                        <a class=\"nav-link\" href=\"/WebVideoPlace/Auth/edit\">edit User</a>
+                    </li>
+                    <li class=\"nav-item\">
                         <a class=\"nav-link\" href=\"/WebVideoPlace/Video/upload\">Upload</a>
                     </li>
                     <li class=\"nav-item\">

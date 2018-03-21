@@ -67,3 +67,29 @@ function checkRegister() {
         });
     }
 }
+
+function editUser(){
+    var valid = true;
+    if($("#name").val()==""||
+        $("#email").val()==""||
+        $("#oPass").val()==""){
+        $("#eName").text("please enter the old password a name and an email address");
+        valid=false;
+    }
+    if(valid){
+        $.ajax({
+            url:"/WebVideoPlace/Auth/editAct",
+            type:"POST",
+            data:{
+                "name":$("#name").val(),
+                "email":$("#email").val(),
+                "oPass":$("#oPass").val(),
+                "nPass":$("#nPass").val()
+            },
+            success:function(result){
+                $("#eName").text(result);
+
+            }
+        })
+    }
+}
