@@ -15,10 +15,10 @@
 <body>
 <?php include_once "header.php"?>
 <form class="form-box" method="post" action="/WebVideoPlace/Video/checkUpload" enctype="multipart/form-data">
-    <h1>Upload Video</h1>
+    <h1>Upload Media</h1>
     <p class="err" id="eName"><?php if(isset($eName)){echo $eName;}?></p>
-    <label for="inputName">Video name:</label>
-    <input type="text" id="inputName" name="name" class="form-control" placeholder="Video Name" required autofocus>
+    <label for="inputName">Media name:</label>
+    <input type="text" id="inputName" name="name" class="form-control" placeholder="Media Name" required autofocus>
 
     <p class="err" id="eDescr"><?php if(isset($eDesc)){echo $eDesc;}?></p>
     <label for="inputDescr">Description:</label>
@@ -27,7 +27,7 @@
     <label for="inputThumbnail">Thumbnail:</label>
     <input type="file" id="inputThumbnail" name="thumbnail" required>
     <p class="err" id="eVideo"><?php if(isset($eVideo)){echo $eVideo;}?></p>
-    <label for="inputVideo">Video:</label>
+    <label for="inputVideo">Media:</label>
     <input type="file" id="inputVideo" name="video" required>
     <button type="submit">Upload</button>
 </form>

@@ -9,10 +9,27 @@
 <?php include_once "header.php" ?>
 <div class="video-box">
     <h1><?php echo $vid["name"];?></h1>
-    <h4><?php echo $vid["owner"];?></h4>
-    <video controls autoplay>
-        <source src="/WebVideoPlace/media/video/<?php echo $vid["video"];?>" >
-    </video>
+    <h4>Owner: <?php echo $vid["owner"];?></h4>
+    <?php
+        $mime=mime_content_type("media/video/".$vid["video"]);
+        if(strpos($mime,"video/")!==false){
+            echo "<video controls autoplay>
+                        <source src=\"/WebVideoPlace/media/video/". $vid["video"]."\" >
+                  </video>";
+        }else if(strpos($mime,"audio/")!==false){
+            echo "<audio controls autoplay>
+                      <source src='/WebVideoPlace/media/video/".$vid["video"]."'>
+                  </audio>";
+        }else if(strpos($mime,"image/")!==false){
+            echo "<img src='/WebVideoPlace/media/video/".$vid["video"]."'>";
+        }else{
+            echo $mime;
+        }
+
+    ?>
+    <!--<video controls autoplay>
+        <source src="/WebVideoPlace/media/video/<?php /*echo $vid["video"];*/?>" >
+    </video>-->
     <div class="vid-likebar">
         <p>views:<?php echo $vid["views"];?></p>
         <?php

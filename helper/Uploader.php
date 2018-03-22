@@ -50,7 +50,10 @@ class Uploader
         $finfo=finfo_open(FILEINFO_MIME_TYPE);
         $type=mime_content_type($file["tmp_name"]);;
         //echo $type;
-        if(strstr($type,"video/")===false){
+        if(strstr($type,"video/")===false&&
+            strstr($type,"audio/")===false&&
+            strstr($type,"image/")===false
+        ){
             //echo "not a video";
             return false;
         }
