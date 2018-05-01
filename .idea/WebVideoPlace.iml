@@ -8,5 +8,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="popper" level="application" />
     <orderEntry type="library" name="jquery-3.3.1" level="application" />
+    <orderEntry type="module" module-name="153ReRep" />
   </component>
 </module>
