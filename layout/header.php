@@ -1,3 +1,4 @@
+<input type="hidden" id="authToken" value="<?php echo $_SESSION["authToken"];?>">
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="#">Web Video Place</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">

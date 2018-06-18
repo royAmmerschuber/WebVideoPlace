@@ -84,7 +84,8 @@ function editUser(){
                 "name":$("#name").val(),
                 "email":$("#email").val(),
                 "oPass":$("#oPass").val(),
-                "nPass":$("#nPass").val()
+                "nPass":$("#nPass").val(),
+                "authToken":$("#authToken").val()
             },
             success:function(result){
                 $("#eName").text(result);

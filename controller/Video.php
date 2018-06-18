@@ -45,8 +45,9 @@ class Video
     }
 
     public function like(){
-        //echo $_POST["isPositive"];
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("
             select count(*) from likedislike 
             where userFK=:uid and videoFK=:vid and isPositive=:pos");
@@ -84,6 +85,8 @@ class Video
     }
     public function comment(){
         Auth::securePage();
+        $_POST=Auth::secureInput($_POST);
+
         $p=Database::instance()->connection()->prepare("
             insert into comment(text, userFK, videoFK) 
         VALUE (:text,:uid,:vid)");
@@ -95,7 +98,9 @@ class Video
     }
 
     public function loadComments(){
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("
             Select c.*, u.name, u.id=v.userFK as isOwner
             from comment as c
@@ -119,6 +124,7 @@ class Video
     }
 
     public function checkUpload(){
+        $_POST=Auth::secureInput($_POST);
         Auth::securePage($_SESSION);
         if(isset($_POST["name"])&&
             isset($_POST["description"])&&
@@ -162,6 +168,7 @@ class Video
 
     //Edit
     public function edit(){
+        $_GET=Auth::secureInput($_GET);
         $uid=Auth::securePage();
         $pdo=Database::instance()->connection();
         $p=$pdo->prepare("select * from video where id=:vid");
@@ -177,7 +184,9 @@ class Video
     }
 
     public function editSave(){
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("update video set name=:name, description=:desc where id=:vid");
         $p->bindParam(":name",$_POST["name"]);
         $p->bindParam(":desc",$_POST["desc"]);
@@ -186,7 +195,9 @@ class Video
         return true;
     }
     public function editDelete(){
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("
             select video as v,thumbnail as t from video where id=:vid");
         $p->bindParam(":vid",$_POST["vid"]);

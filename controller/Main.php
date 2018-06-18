@@ -13,7 +13,9 @@ class Main
     }
 
     public function loadList(){
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("
             Select 
                 v.id,
@@ -48,7 +50,9 @@ class Main
     }
 
     public function loadListFav(){
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("
             Select 
                 v.id,
@@ -91,7 +95,9 @@ class Main
 
     public function dropFav(){
         echo "test";
+        $_POST=Auth::secureInput($_POST);
         $pdo=Database::instance()->connection();
+
         $p=$pdo->prepare("DELETE from likeDislike where videoFK=:vid and userFK=:uid");
         $p->bindParam(":vid",$_POST["vid"]);
         $p->bindParam(":uid",$_SESSION["uid"]);

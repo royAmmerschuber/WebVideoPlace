@@ -16,6 +16,25 @@ class Auth
             return $_SESSION["uid"];
         }
     }
+    public static function secureInput($input){
+        $output=array();
+        foreach($input as $key => $value) {
+            $output[$key]=htmlspecialchars($value);
+        }
+        return $output;
+    }
+    public static function secureTokenCheck($post, $session){
+        if (isset($post["authToken"]) && isset($session["authToken"])){
+            if($post["authToken"] == $session["authToken"]) {
+                return true;
+            }
+            echo $post["authToken"];
+            echo "<br>";
+            echo $session["authToken"];
+        }
+
+        return false;
+    }
 
     public function index(){
         $this->login();
@@ -25,6 +44,7 @@ class Auth
         include_once "layout/login.php";
     }
     public function loginCheck(){
+        $_POST=self::secureInput($_POST);
         if(isset($_POST["name"]) && isset($_POST["password"])) {
             $valid = true;
             $pdo = Database::instance()->connection();
@@ -46,6 +66,11 @@ class Auth
             }
 
             if ($valid) {
+                try {
+                    $_SESSION["authToken"] = random_bytes(64);
+                } catch (Exception $e) {
+                    $_SESSION["authToken"] = (string)rand();
+                }
                 $_SESSION["uid"] = $u["id"];
                 return;
             }
@@ -65,6 +90,7 @@ class Auth
 
     }
     public function registerCheck(){
+        $_POST=self::secureInput($_POST);
         $pdo = Database::instance()->connection();
         $valid=true;
         if(isset($_POST["name"])&&isset($_POST["email"])&&isset($_POST["password1"])&&isset($_POST["password2"])){
@@ -123,31 +149,34 @@ class Auth
         include_once "layout/editUser.php";
     }
     public function editAct(){
-        Auth::securePage();
-        $pdo=Database::instance()->connection();
-        $p=$pdo->prepare("select * from user where id=:uid");
-        $p->bindParam(":uid",$_SESSION["uid"]);
-        $p->execute();
-        $x=$p->fetch(PDO::FETCH_ASSOC);
-        if(password_verify($_POST["oPass"],$x["password"])){
-            if($_POST["nPass"]==""){
-                $_POST["nPass"]=$_POST["oPass"];
-            }
-            $p=$pdo->prepare("
+        if(self::secureTokenCheck($_POST,$_SESSION)) {
+            Auth::securePage();
+            $_POST = self::secureInput($_POST);
+            $pdo = Database::instance()->connection();
+            $p = $pdo->prepare("select * from user where id=:uid");
+            $p->bindParam(":uid", $_SESSION["uid"]);
+            $p->execute();
+            $x = $p->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($_POST["oPass"], $x["password"])) {
+                if ($_POST["nPass"] == "") {
+                    $_POST["nPass"] = $_POST["oPass"];
+                }
+                $p = $pdo->prepare("
                 update user 
                 set name=:name,
                     email=:email,
                     password=:pass 
                 where id=:uid"
-            );
-            $hashword=password_hash($_POST["nPass"],PASSWORD_DEFAULT);
-            $p->bindParam(":name",$_POST["name"]);
-            $p->bindParam(":email",$_POST["email"]);
-            $p->bindParam(":pass",$hashword);
-            $p->bindParam(":uid",$_SESSION["uid"]);
-            $p->execute();
-        }else{
-            echo "password does not match";
+                );
+                $hashword = password_hash($_POST["nPass"], PASSWORD_DEFAULT);
+                $p->bindParam(":name", $_POST["name"]);
+                $p->bindParam(":email", $_POST["email"]);
+                $p->bindParam(":pass", $hashword);
+                $p->bindParam(":uid", $_SESSION["uid"]);
+                $p->execute();
+            } else {
+                echo "password does not match";
+            }
         }
     }
 }

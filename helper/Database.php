@@ -4,6 +4,7 @@ class Database{
     private static $instance = null;
     private $config;
     private $pdo;
+
     private function __construct(){
         $this->config = parse_ini_file(__DIR__.'/../config/database.ini');
         try{
